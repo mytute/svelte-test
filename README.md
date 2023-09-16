@@ -1,22 +1,25 @@
-# Binding Text
+# Binding Html
 
-1. delete the props property in main.js file. 
-2. in App.svelte file in the script tag define variable 'name'
+1. create new variable call "channel" and define string value with html tag
 
 ```js 
-const name = 'samadhi';
+const channel = '<b>samadhi</b>';
 ```
-3. in the main tag open single curly braces to put above 'name' variable and see the result. 
+3. in the main tag open single curly braces to put above 'name' variable with "@html" prefix and see the result. 
 ```js 
 <main>
-	<h1>Hello {name}!</h1>
+    <div>{channel}</div>
+	<div>{@html channel}</div>
 </main>
 ```
 
-4. change 'name' variable above to 2+2 and see the result. 
+4. create new variable call "hack" to vulnerability example of html binding.    
+```js 
+const hack = `<a href="#" onclick="alert('you have been hacked')" >Win a prize!</a>`;
+```
 ```js 
 <main>
-	<h1>Hello {2+2}!</h1>
+	<div>{@html hack}</div>
 </main>
 ```
 
