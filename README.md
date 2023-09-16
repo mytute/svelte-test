@@ -1,27 +1,47 @@
-# Binding Html
+# Binding Attributes
 
-1. create new variable call "channel" and define string value with html tag
+1. in the script tag, create "headingId" variable with value of attribute "heading" 
 
 ```js 
-const channel = '<b>samadhi</b>';
+const headingId = 'heading';
 ```
-3. in the main tag open single curly braces to put above 'name' variable with "@html" prefix and see the result. 
+2. in the main tag with open single curly braces, put above 'headingId' variable as tag id. 
 ```js 
 <main>
-    <div>{channel}</div>
-	<div>{@html channel}</div>
+	<h2 id={headingId} >This is heading</h2>
 </main>
 ```
 
-4. create new variable call "hack" to vulnerability example of html binding.    
+3. show that it is possible to put id directly with single curly braces. and check the result in inspect window on browser.     
 ```js 
-const hack = `<a href="#" onclick="alert('you have been hacked')" >Win a prize!</a>`;
-```
-```js 
+<script>
+const id = 'heading';
+</script>
 <main>
-	<div>{@html hack}</div>
+	<h2 {id} >This is heading</h2>
 </main>
 ```
+
+4 show boolan attribute false value not showing on the tag but if value true it will show on the tag.
+
+```js 
+<script>
+const disabled = true;
+</script>
+<main>
+	<button {disabled} >Bind</button> // can see on the tag
+</main>
+```
+```js 
+<script>
+const disabled = flase;
+</script>
+<main>
+	<button {disabled} >Bind</button> // can't see on the tag
+</main>
+```
+
+
 
 
 

@@ -2,6 +2,8 @@
 	const name = "Samadhi";
 	const channel = '<b>samadhi</b>';
 	const hack = `<a href="#" onclick="alert('you have been hacked')" >Win a prize!</a>`;
+    const id = 'heading';
+	const disabled= false;
 </script>
 
 <main>
@@ -9,6 +11,8 @@
 	<div>{@html channel}</div>
 	<div>{@html hack}</div>
 	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+    <h2 {id}>This is heading</h2>
+	<button disabled={disabled} >Bind</button>
 </main>
 
 <style>
