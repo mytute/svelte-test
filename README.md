@@ -1,69 +1,36 @@
-# Binding Classes
+# Conditional Rendering
 
-1. in the style tag, create class call 'underline'
-
-```js 
-<style>
-  .underline {
-    text-decoration: underline;
-  }
-</style>
-```
-
-2. in the main tag, add h2 tag with created class name   
-```js 
-<main>
-  <h2 class="underline" >Underline Text</h2>
-</main>
-```
-
-## Dynamic Classes 
-
-3. in the style tag, create two class call 'danger' and success
-
-```js 
-<style>
-  .danger {
-    color: red;
-  }
-  .success {
-    color: olivedrab;
-  }
-</style>
-```
-
-4. in the script tag, create new variable call 'status' equal to 'danger'
-
-```js 
+### if condition
+1. in script tag, define variable call 'num' equal to 0 
+```js
 <script>
- const status = 'danger';
+  const num = 5;
 </script>
-```
-5. in the main tag, create h2 tag with calss qual to 'status' and test this result with changing status value to 'danger' to 'success'
-```js 
+```  
+
+2. in main tag, create if condition inside curly braces with '#if' symbol and end with '/if' symbol.     
+```js
 <main>
- <h2 class={status}>Status</h2>
+  {#if num === 0} 
+    <h2> The number is zero </h2> // this tag showing if condition true
+  {/if}  
 </main>
-```
+```  
 
-6. show how to change class with condition in normal way  
+### if, else and if else conditions
 
-```js 
-<script>
- const isPromoted = false;
- const promoted = false;
-</script>
+3. show how to use if, else and if else conditions to check is number equal to zero or negative or positive or not a number.
 
+```js
 <main>
-  <h2 class={isPromoted ? 'promoted': ''}>Movie Title Noraml</h2>
-  <h2 class:promoted={isPromoted}>Movie Title Special Directive</h2>
+  {#if num === 0} 
+    <h2> The number is zero </h2> 
+  {:else if num < 0 }
+    <h2> The number is negative </h2> 
+  {:else if num > 0 }
+    <h2> The number is positive </h2> 
+  {:else }
+    <h2> Not a number </h2> 
+  {/if}  
 </main>
-<h2 class:promoted>Movie Title Special Directive with shorthand way</h2>
-</main>
-<style>
-  .promoted {
-    font-style: italic;
-  }
-</style>
-
-```
+```    
