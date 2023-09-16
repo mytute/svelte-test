@@ -1,48 +1,69 @@
-# Binding Attributes
+# Binding Classes
 
-1. in the script tag, create "headingId" variable with value of attribute "heading" 
+1. in the style tag, create class call 'underline'
 
 ```js 
-const headingId = 'heading';
+<style>
+  .underline {
+    text-decoration: underline;
+  }
+</style>
 ```
-2. in the main tag with open single curly braces, put above 'headingId' variable as tag id. 
+
+2. in the main tag, add h2 tag with created class name   
 ```js 
 <main>
-	<h2 id={headingId} >This is heading</h2>
+  <h2 class="underline" >Underline Text</h2>
 </main>
 ```
 
-3. show that it is possible to put id directly with single curly braces. and check the result in inspect window on browser.     
+## Dynamic Classes 
+
+3. in the style tag, create two class call 'danger' and success
+
+```js 
+<style>
+  .danger {
+    color: red;
+  }
+  .success {
+    color: olivedrab;
+  }
+</style>
+```
+
+4. in the script tag, create new variable call 'status' equal to 'danger'
+
 ```js 
 <script>
-const id = 'heading';
+ const status = 'danger';
 </script>
+```
+5. in the main tag, create h2 tag with calss qual to 'status' and test this result with changing status value to 'danger' to 'success'
+```js 
 <main>
-	<h2 {id} >This is heading</h2>
+ <h2 class={status}>Status</h2>
 </main>
 ```
 
-4 show boolan attribute false value not showing on the tag but if value true it will show on the tag.
+6. show how to change class with condition in normal way  
 
 ```js 
 <script>
-const disabled = true;
+ const isPromoted = false;
+ const promoted = false;
 </script>
+
 <main>
-	<button {disabled} >Bind</button> // can see on the tag
+  <h2 class={isPromoted ? 'promoted': ''}>Movie Title Noraml</h2>
+  <h2 class:promoted={isPromoted}>Movie Title Special Directive</h2>
 </main>
-```
-```js 
-<script>
-const disabled = flase;
-</script>
-<main>
-	<button {disabled} >Bind</button> // can't see on the tag
+<h2 class:promoted>Movie Title Special Directive with shorthand way</h2>
 </main>
+<style>
+  .promoted {
+    font-style: italic;
+  }
+</style>
+
 ```
-
-
-
-
-
-
