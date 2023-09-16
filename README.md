@@ -1,4 +1,4 @@
-# Binding Text
+# Binding Html
 
 1. create new variable call "channel" and define string value with html tag
 
