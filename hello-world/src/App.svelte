@@ -1,17 +1,9 @@
 <script>
-  const num = 5;
+
 </script>
 
 <main>
-	{#if num === 0}
-	  <h2>This number is Zero</h2>
-	{:else if num <0}
-	  <h2>This number is Negative</h2>
-	{:else if num >0}
-	  <h2>This number is Positive</h2>
-	{:else}
-	  <h2>This is not a number</h2>
-    {/if}
+
 </main>
 
 <style>
