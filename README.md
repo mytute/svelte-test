@@ -1,53 +1,42 @@
-# List Rendering
+# Event Handling
 
 ### i
-1. in script tag, define array with three string.
+1. in script tag, create new variable call count that equal to 0 with let keyword.
 ```js
 <script>
-  const names = ['Bruce', 'Clark', 'Diana'];
+  let count = 0;
 </script>
 ```  
 
-2. in main tag, with curly braces define each tag in following way and bind values using curly braces. 
+2. in main tag, create button element with click event in following way. on:click. and bind count value to button.
 ```js
 <main>
-  {#each names as name}
-    <h2>{name}</h2>
-  {/each}
+  <button on:click={()=> count = count +1} >Count {count}</button>
 </main>
 ```  
 
-3. show how to use index in above list rendering   
-```js
-<main>
-  {#each names as name, index}
-    <h2>{index+1} {name}</h2>
-  {/each}
-</main>
-```  
-
-4. show how to render object array  
+3. show how to execute function when click event emitted.   
 ```js
 <script>
-  const fullNames = [
-    {first:'Bruce', last: 'Wayne'},
-    {first:'Clark', last: 'Kent'},
-    {first:'Princess', last: 'Diana'},
-  ]
+  let count = 0;
+  function handleClick(){
+    count +=1;
+  }
 </script>
 <main>
-  {#each fullNames as name, index}
-    <h2>{index+1} {name.first} {name.last}</h2>
-  {/each}
+  <button on:click={handleClick} >Count {count}</button>
 </main>
-``` 
+```  
 
-5. show how to add unique key for the above rendering list.  
-add someting unique value in brakets at the end of the start of loop. here '(name)' 
+4. show how to pass argument to above 'handleClick' function. 
 ```js
+<script>
+  let count = 0;
+  function handleClick(event, size){
+    count +=size;
+  }
+</script>
 <main>
-  {#each fullNames as name, index (name)}
-    <h2>{index+1} {name.first} {name.last}</h2>
-  {/each}
+  <button on:click={(event)=>handleClick(event, 5)} >Count {count}</button>
 </main>
 ``` 

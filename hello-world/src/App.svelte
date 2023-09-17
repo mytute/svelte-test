@@ -1,19 +1,13 @@
 <script>
-	const names = ['Bruce', 'Clark', 'Diana'];
-	const fullNames = [
-		{first:'Bruce', last: 'Wayne'},
-		{first:'Clark', last: 'Kent'},
-		{first:'Princess', last: 'Diana'},
-	];
+let count = 0;
+function handleClick(event, size){
+    count +=size;
+  }
 </script>
 
 <main>
- {#each names as name, index}
-    <h2>{index+1} {name}</h2>
- {/each}
- {#each fullNames as name, index (name.first)}
-    <h2>{index+1} {name.first} {name.last}</h2>
-  {/each}
+	<button on:click={()=> count = count +1} >Count {count}
+	<button on:click={(event)=>handleClick(event, 5)} >Count {count}</button>
 </main>
 
 <style>
