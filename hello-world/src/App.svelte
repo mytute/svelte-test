@@ -1,17 +1,19 @@
 <script>
-  const num = 5;
+	const names = ['Bruce', 'Clark', 'Diana'];
+	const fullNames = [
+		{first:'Bruce', last: 'Wayne'},
+		{first:'Clark', last: 'Kent'},
+		{first:'Princess', last: 'Diana'},
+	];
 </script>
 
 <main>
-	{#if num === 0}
-	  <h2>This number is Zero</h2>
-	{:else if num <0}
-	  <h2>This number is Negative</h2>
-	{:else if num >0}
-	  <h2>This number is Positive</h2>
-	{:else}
-	  <h2>This is not a number</h2>
-    {/if}
+ {#each names as name, index}
+    <h2>{index+1} {name}</h2>
+ {/each}
+ {#each fullNames as name, index (name.first)}
+    <h2>{index+1} {name.first} {name.last}</h2>
+  {/each}
 </main>
 
 <style>
