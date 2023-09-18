@@ -1,13 +1,9 @@
 <script>
-let count = 0;
-function handleClick(event, size){
-    count +=size;
-  }
+
 </script>
 
 <main>
-	<button on:click={()=> count = count +1} >Count {count}
-	<button on:click={(event)=>handleClick(event, 5)} >Count {count}</button>
+
 </main>
 
 <style>
