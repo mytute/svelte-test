@@ -1,243 +1,96 @@
-# Form Handling
+# Reactive Declarations and Reactive Statements
 
-Capture user inputs
-Inputs
-Textareas
-Single select dropdown control
-Multi select control
-Checkbox
-Checkbox group
-Radio   
-Submit from data
+In here automatically calculated values when dependency changes.
 
-
-
-### i
-1. in style tag, add sytle for form and remove 'text-align: center'   
+### Reactive Declarations
+1. in script tag, define two variable call 'firstName' and 'lastName'. and using reactive declaration make new variable of both above values.  
 ```svelte
-<style>
-  input + label {
-		display: inline-flex;
-	}
-  main {
-		/* text-align: center; */
-	}
-</style>
+<script>
+ let firstName = 'Bruce';
+ let lastName = 'Wayne';
+ $:fullName = `${firstName} ${lastName}`; // compose new variable
+</script>
 ```
 
-2. in script tag, create new object variable call 'formValues' contain form fields and it's initial values.
-```js
-<script>
-   const formValues = {
-	   name:''
-   }
-</script>
-```  
-
-3. in main tag, create label and input element inside form elements and bind input element with above formValues.name value.
-```js
+2. in main tag, define above normal and reactive delaration in h2 tab and see the result
+```svelte
 <main>
-  	<form>
-      <div>
-        <label for="name">Name</label>
-        <input type="text" name="" id="name" bind:value={formValues.name} />
-	    </div>
-	</form>
+  <h2>{firstName} {lastName}</h2>
+  <h2>{fullName}</h2>
 </main>
 ```  
 
-4. in main tag.  show json values to show live updates on 'formValues' variable 
-```js
+3. add the button in main tag and when onclick event change 'firstName' variable to another name and see how svelte update values when dependency changed.   
+```svelte
 <main>
-	<div>
-		<pre>
-			{JSON.stringify(formValues, null, 2)}
-		</pre>
-	</div>
+  < <button on:click={()=>{
+	firstName= 'Samadhi';
+  }} >Change First Name</button>
 </main>
 ```  
 
-4. show how input type change to number "type='number'" make changes json value type. show this is handle by svelte and not by vanilla js 
-```js
-<main>
-	<div>
-		<pre>
-			{JSON.stringify(formValues, null, 2)}
-		</pre>
-	</div>
-	<form>
-		<div>
-		 <label for="name">Name</label>
-		 <input type="text" name="" id="name" bind:value={formValues.name} />
-	  </div>
-	</form>
-
-</main>
-``` 
-
-5. show how to add textarea and bind with 'formValues' variable. 
+4. in script tag, create new object-array variable call 'items'. And calculate total price and store it in Reactive-Declarative way. after that show total result in main tag
 ```svelte
 <script>
-   const formValues = {
-	 ...
-   profile:''
-   }
+ let items = [
+	{id:1, title:'TV', price:100},
+	{id:2, title:'Phone', price:200},
+	{id:2, title:'Laptop', price:300},
+ ];
+ $:total = items.reduce((total,current)=>total+current.price,0);
 </script>
 <main>
-
-	<form>
-    ....
-		<div>
-		 <label for="profile">Profile</label>
-		 <textarea  id="profile" bind:value={formValues.profile} />
-	  </div>
-	</form>
-
+  <h2>total: {total}</h2>
 </main>
-``` 
+```
 
-6. show how to add dropdown and bind with 'formValues' variable.
+5. show mutation will not cause a rerender and reactive system works based on assignment. 
+
+add a new button and in it's event add the new item to items array.    
+
+```svelte
+<main>
+  <button on:click={()=>{items.push({id:2, title:'Pen', price:5})}} >Push Item</button>
+  <button on:click={()=>{items = [...items, {id:2, title:'Pen', price:5}]}} >Add Item</button>
+</main>
+```
+
+### Reactive Statements    
+
+6. in the script tag, add console.log statement as reactive statement. and see when change name button click it will create new console.log in the browser with new value.
+
+```svelte
 <script>
-   const formValues = {
-	 ...
-   country:''
-   }
+ $: console.log(`Fullname is ${firstName} ${lastName}`);
 </script>
-<main>
+```
 
-	<form>
-    ...
-		<div>
-			<label for="country">Country</label>
-			<select  id="country" bind:value={formValues.country}>
-				<option value="">Select a contry</option>
-				<option value="india">India</option>
-				<option value="vietnam">Vietnam</option>
-				<option value="singapore">Singapore</option>
-			</select>
-		</div>
-	</form>
-
-</main>
-``` 
-
-7. show how to add multiple dropdown and bind with 'formValues' variable.
+7. show Reactive Statements can make inside curly braces and make more statement to it.   
+```svelte
 <script>
-   const formValues = {
-	 ...
-   jobLocation: []
-   }
+ $:{
+  const fullName = `${firstName} ${lastName}`
+  console.log(`Fullname is ${fullName}`);
+ }
 </script>
-<main>
+```
 
-	<form>
-    ...
-		<div>
-			<label for="job-location">Job Location</label>
-			<select  id="job-location" bind:value={formValues.jobLocation} multiple>
-				<option value="">Select a contry</option>
-				<option value="india">India</option>
-				<option value="vietnam">Vietnam</option>
-				<option value="singapore">Singapore</option>
-			</select>
-		</div>
-	</form>
-
-</main>
-``` 
-
-8. show how to add single checkbox and bind with 'formValues' variable. (remote work)
+7. show using Reactive Statements how to handdle volume control max and min .   
+```svelte
 <script>
-   const formValues = {
-	 ...
-   remoteWork: false
-   }
+ $:if(valume < 0){
+	alert(`Can't go lower`);
+	valume = 0;
+ }else if(valume>20){
+	alert(`Can't go higher`);
+	valume = 20;
+ }
+ let valume = 0;
 </script>
 <main>
-
-	<form>
-    <!-- ... -->
-    <div>
-			<input  type="checkbox" id="remote-work" bind:checked={formValues.remoteWork} />
-			<label for="remote-work">Open to remove work ?</label>
-		</div>
-	</form>
-
+  <h2>Current valume {valume}</h2>
+  <button on:click={()=> valume++}>Increment valume</button>
+  <button on:click={()=> valume--}>Decrement valume</button>
 </main>
-``` 
 
-9. show how to add multiple checkbox and bind with 'formValues' variable. (skill set)
-<script>
-   const formValues = {
-	 ...
-   skillSet: []
-   }
-</script>
-<main>
-
-	<form>
-    <!-- ... -->
-    <div>
-			<label for="skill-set">Skill set</label>
-
-			<input  type="checkbox" id="html" value="html" bind:group={formValues.skillSet}/>
-			<label for="html">Html</label>
-
-			<input  type="checkbox" id="css" value="css" bind:group={formValues.skillSet}/>
-			<label for="css">Css</label>
-
-			<input  type="checkbox" id="javascript" value="javascript" bind:group={formValues.skillSet} />
-			<label for="javascript">Javascript</label>
-		</div>
-	</form>
-
-</main>
-``` 
-
-10. show how to add multiple radio and bind with 'formValues' variable. (skill set)
-<script>
-   const formValues = {
-	 ...
-   yearsOfExperience: ''
-   }
-</script>
-<main>
-
-	<form>
-    <!-- ... -->
-    <div>
-			<label for="skill-set">Years Of Experience</label>
-
-			<input  type="radio" id="0-2" value="0-2" bind:group={formValues.yearsOfExperience}/>
-			<label for="0-2">0-2</label>
-
-			<input  type="radio" id="3-5" value="3-5" bind:group={formValues.yearsOfExperience}/>
-			<label for="3-5">3-5</label>
-
-			<input  type="radio" id="6-10" value="6-10" bind:group={formValues.yearsOfExperience} />
-			<label for="6-10">6-10</label>
-		</div>
-	</form>
-
-</main>
-``` 
-
-11. show how to submit the form
-add submit button end of the form tag
-|preventDefault make not to refresh the page
-
-<script>
-   function submitForm(event){
-	   console.log(formValues);
-   }
-</script>
-<main>
-
-	<form  on:submit|preventDefault={submitForm}>
-    <!-- ... -->
-
-    <button type="submit">submit</button>
-	</form>
-
-</main>
-``` 
+```
