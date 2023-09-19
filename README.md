@@ -1,82 +1,75 @@
-# Components and Props
+# Contex api
 
-In here automatically calculated values when dependency changes.
+context provides a way to pass data through the component tree without having to pass proos down manually at every level.
 
-### Components
-1. create new folder call 'components' inside 'src' folder and inside 'components' folder create new file call 'Greet.svelte'.  
+* set a context value.
+* get the context value.
+
+
+1. create ComponentC, ComponentE, ComponentF inside 'component' folder in 'src' folder.  
+
+2. Then link created component in following order as nested component.   
+
+* App > ComponentC > ComponentE > ComponentF
+
+App.svelte 
 ```svelte
-// Greet.svelte 
-// no need to add main tag here.
-<h2>Hello Samadhi</h2>
-```
-
-2. then import newly created component to 'App.svelte' component and see the result
-```svelte
-// App.svelte
 <script>
-  import Greet from "./components/Greet.svelte";
+  import ComponentC from "./components/ComponentC.svelte";
+  const userName = 'Samadhi';
 </script>
 <main>
-   <Greet/>
+	<h2>App component username - {userName}</h2>
+	<ComponentC />
 </main>
 ```
 
-3. show how to reuse 'Greet' component by copy-past it several times
+ComponentC.svelte 
 ```svelte
-<main>
-   <Greet/>
-   <Greet/>
-   <Greet/>
-</main>
-```    
-
-### Props   
-
-
-4. show how to pass data to child component as attribute on the 'Gree' tag inside 'main' tag.
-```svelte
-// App.svelte
 <script>
-  const name = "samadhi"
+    import ComponentE from "./ComponentE.svelte";
 </script>
-<main>
-	<Greet name={name} heroName="supreman"/>
-	<Greet name='Diana' heroName="wonderwomen"/>
-</main>
-```  
+<h2>Child C Component</h2>
+<ComponentE />
+```
 
-5. in child component show how to receive props passing by parent and how to render that data on child component. 
+ComponentE.svelte 
 ```svelte
-// Greet.svelte
 <script>
-    export let name;
-    export let heroName;
+    import ComponentF from "./ComponentF.svelte";
 </script>
 
-<main>
-    <h2>Name is {name} as {heroName}</h2>
-</main>
-```  
+<h2>Child E Component</h2>
+<ComponentF />
+```
 
-6. show how to set default value to props in child component.
+ComponentF.svelte 
 ```svelte
-// Greet.svelte
 <script>
-    export let heroName = 'detault value';
-</script>
-```  
-
-7. show how to spread make pass props to child component  
-```svelte
-// App.svelte
-<script>
-const obj = {
-    name: 'Barry',
-    heroName: 'Flash'
-  }
 </script>
 
-<main>
-    <Greet {...obj}/>
-</main>
-```  
+<h2>Child F Component</h2>
+<h2>Child F userName - {userName}</h2>
+```
+
+3. show how to pass 'App' component 'userName' variable to 'ComponentC'
+
+App.svelte 
+```svelte
+<script>
+  import { setContext } from "svelte";
+  const userName = 'Samadhi';
+  setContext('username-context', userName);
+</script>
+```
+
+ComponentF.svelte 
+```svelte
+<script>
+    import { getContext } from "svelte";
+    const userName = getContext('username-context');
+</script>
+
+<h2>Child F Component</h2>
+<h2>Child F userName - {userName}</h2>
+```
