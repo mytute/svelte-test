@@ -1,96 +1,82 @@
-# Reactive Declarations and Reactive Statements
+# Components and Props
 
 In here automatically calculated values when dependency changes.
 
-### Reactive Declarations
-1. in script tag, define two variable call 'firstName' and 'lastName'. and using reactive declaration make new variable of both above values.  
+### Components
+1. create new folder call 'components' inside 'src' folder and inside 'components' folder create new file call 'Greet.svelte'.  
 ```svelte
-<script>
- let firstName = 'Bruce';
- let lastName = 'Wayne';
- $:fullName = `${firstName} ${lastName}`; // compose new variable
-</script>
+// Greet.svelte 
+// no need to add main tag here.
+<h2>Hello Samadhi</h2>
 ```
 
-2. in main tag, define above normal and reactive delaration in h2 tab and see the result
+2. then import newly created component to 'App.svelte' component and see the result
+```svelte
+// App.svelte
+<script>
+  import Greet from "./components/Greet.svelte";
+</script>
+<main>
+   <Greet/>
+</main>
+```
+
+3. show how to reuse 'Greet' component by copy-past it several times
 ```svelte
 <main>
-  <h2>{firstName} {lastName}</h2>
-  <h2>{fullName}</h2>
+   <Greet/>
+   <Greet/>
+   <Greet/>
+</main>
+```    
+
+### Props   
+
+
+4. show how to pass data to child component as attribute on the 'Gree' tag inside 'main' tag.
+```svelte
+// App.svelte
+<script>
+  const name = "samadhi"
+</script>
+<main>
+	<Greet name={name} heroName="supreman"/>
+	<Greet name='Diana' heroName="wonderwomen"/>
 </main>
 ```  
 
-3. add the button in main tag and when onclick event change 'firstName' variable to another name and see how svelte update values when dependency changed.   
+5. in child component show how to receive props passing by parent and how to render that data on child component. 
 ```svelte
+// Greet.svelte
+<script>
+    export let name;
+    export let heroName;
+</script>
+
 <main>
-  < <button on:click={()=>{
-	firstName= 'Samadhi';
-  }} >Change First Name</button>
+    <h2>Name is {name} as {heroName}</h2>
 </main>
 ```  
 
-4. in script tag, create new object-array variable call 'items'. And calculate total price and store it in Reactive-Declarative way. after that show total result in main tag
+6. show how to set default value to props in child component.
 ```svelte
+// Greet.svelte
 <script>
- let items = [
-	{id:1, title:'TV', price:100},
-	{id:2, title:'Phone', price:200},
-	{id:2, title:'Laptop', price:300},
- ];
- $:total = items.reduce((total,current)=>total+current.price,0);
+    export let heroName = 'detault value';
 </script>
+```  
+
+7. show how to spread make pass props to child component  
+```svelte
+// App.svelte
+<script>
+const obj = {
+    name: 'Barry',
+    heroName: 'Flash'
+  }
+</script>
+
 <main>
-  <h2>total: {total}</h2>
+    <Greet {...obj}/>
 </main>
-```
-
-5. show mutation will not cause a rerender and reactive system works based on assignment. 
-
-add a new button and in it's event add the new item to items array.    
-
-```svelte
-<main>
-  <button on:click={()=>{items.push({id:2, title:'Pen', price:5})}} >Push Item</button>
-  <button on:click={()=>{items = [...items, {id:2, title:'Pen', price:5}]}} >Add Item</button>
-</main>
-```
-
-### Reactive Statements    
-
-6. in the script tag, add console.log statement as reactive statement. and see when change name button click it will create new console.log in the browser with new value.
-
-```svelte
-<script>
- $: console.log(`Fullname is ${firstName} ${lastName}`);
-</script>
-```
-
-7. show Reactive Statements can make inside curly braces and make more statement to it.   
-```svelte
-<script>
- $:{
-  const fullName = `${firstName} ${lastName}`
-  console.log(`Fullname is ${fullName}`);
- }
-</script>
-```
-
-7. show using Reactive Statements how to handdle volume control max and min .   
-```svelte
-<script>
- $:if(valume < 0){
-	alert(`Can't go lower`);
-	valume = 0;
- }else if(valume>20){
-	alert(`Can't go higher`);
-	valume = 20;
- }
- let valume = 0;
-</script>
-<main>
-  <h2>Current valume {valume}</h2>
-  <button on:click={()=> valume++}>Increment valume</button>
-  <button on:click={()=> valume--}>Decrement valume</button>
-</main>
-
-```
+```  

@@ -1,9 +1,16 @@
 <script>
-
+  import Greet from "./components/Greet.svelte";
+  const name = "samadhi"
+  const obj = {
+	name: 'Barry',
+	heroName: 'Flash'
+  }
 </script>
 
 <main>
-
+	<Greet name={name} heroName="supreman"/>
+	<Greet name='Diana' heroName="wonderwomen"/>
+	<Greet {...obj}/>
 </main>
 
 <style>
