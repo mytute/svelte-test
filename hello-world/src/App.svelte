@@ -1,96 +1,47 @@
 <script>
-   const formValues = {
-	 name:'',
-	 profile: '',
-	 country:'',
-	 jobLocation: [],
-	 remoteWork: false,
-	 skillSet: [],
-	 yearsOfExperience:''
-   }
+ let firstName = 'Bruce';
+ let lastName = 'Wayne';
+ $:fullName = `${firstName} ${lastName}`; // compose new variable
+ $: console.log(`Fullname is ${firstName} ${lastName}`);
+ $:{
+  const fullName = `${firstName} ${lastName}`
+  console.log(`Fullname is - ${fullName}`);
+ }
 
-   function submitForm(event){
+ let items = [
+	{id:1, title:'TV', price:100},
+	{id:2, title:'Phone', price:200},
+	{id:2, title:'Laptop', price:300},
+ ];
+ $:total = items.reduce((total,current)=>total+current.price,0);
 
-	 console.log(formValues);
-   }
+ $:if(valume < 0){
+	alert(`Can't go lower`);
+	valume = 0;
+ }else if(valume>20){
+	alert(`Can't go higher`);
+	valume = 20;
+ }
+
+ let valume = 0;
 </script>
 
 <main>
-	<div>
-		<pre>
-			{JSON.stringify(formValues, null, 2)}
-		</pre>
-	</div>
-	<form on:submit|preventDefault={submitForm}>
-		<div>
-		 <label for="name">Name</label>
-		 <input type="text" name="" id="name" bind:value={formValues.name} />
-	    </div>
-		<div>
-		  <label for="profile">Profile</label>
-		  <textarea  id="profile" bind:value={formValues.profile} />
-		</div>
-		<div>
-			<label for="country">Country</label>
-			<select  id="country" bind:value={formValues.country}>
-				<option value="">Select a contry</option>
-				<option value="india">India</option>
-				<option value="vietnam">Vietnam</option>
-				<option value="singapore">Singapore</option>
-			</select>
-		</div>
+  <button on:click={()=>{
+	firstName= 'Samadhi';
+  }} >Change First Name</button>
+  <button on:click={()=>{items.push({id:2, title:'Pen', price:5})}} >Push Item</button>
+  <button on:click={()=>{items = [...items, {id:2, title:'Pen', price:5}]}} >Add Item</button>
+  <h2>{firstName} {lastName}</h2>
+  <h2>{fullName}</h2>
+  <h2>total: {total}</h2>
 
-		<div>
-			<label for="job-location">Job Location</label>
-			<select  id="job-location" bind:value={formValues.jobLocation} multiple>
-				<option value="">Select a contry</option>
-				<option value="india">India</option>
-				<option value="vietnam">Vietnam</option>
-				<option value="singapore">Singapore</option>
-			</select>
-		</div>
-
-		<div>
-			<input  type="checkbox" id="remote-work" bind:checked={formValues.remoteWork} />
-			<label for="remote-work">Open to remove work ?</label>
-		</div>
-
-		<div>
-			<label for="skill-set">Skill set</label>
-
-			<input  type="checkbox" id="html" value="html" bind:group={formValues.skillSet}/>
-			<label for="html">Html</label>
-
-			<input  type="checkbox" id="css" value="css" bind:group={formValues.skillSet}/>
-			<label for="css">Css</label>
-
-			<input  type="checkbox" id="javascript" value="javascript" bind:group={formValues.skillSet} />
-			<label for="javascript">Javascript</label>
-		</div>
-
-		<div>
-			<label for="skill-set">Years Of Experience</label>
-
-			<input  type="radio" id="0-2" value="0-2" bind:group={formValues.yearsOfExperience}/>
-			<label for="0-2">0-2</label>
-
-			<input  type="radio" id="3-5" value="3-5" bind:group={formValues.yearsOfExperience}/>
-			<label for="3-5">3-5</label>
-
-			<input  type="radio" id="6-10" value="6-10" bind:group={formValues.yearsOfExperience} />
-			<label for="6-10">6-10</label>
-		</div>
-
-
-        <button type="submit">submit</button>
-	</form>
-
+  <h2>Current valume {valume}</h2>
+  <button on:click={()=> valume++}>Increment valume</button>
+  <button on:click={()=> valume--}>Decrement valume</button>
 </main>
 
 <style>
-	input + label {
-		display: inline-flex;
-	}
 	main {
 		/* text-align: center; */
 		padding: 1em;
