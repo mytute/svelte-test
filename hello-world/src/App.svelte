@@ -1,8 +1,13 @@
 <script>
-
+  import { setContext } from "svelte";
+  import ComponentC from "./components/ComponentC.svelte";
+  const userName = 'Samadhi';
+  setContext('username-context', userName);
 </script>
 
 <main>
+	<h2>App component username - {userName}</h2>
+	<ComponentC />
 
 </main>
 
