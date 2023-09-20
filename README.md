@@ -82,4 +82,108 @@ Card.svelte
 
 ### Named Slots 
 
-* make multiple slots
+* make multiple slots  
+
+4. create copy of 'Card' component call 'Card2' inside component folder.
+
+5. in 'Card2', add 3 parts slots with name attribute in following way.
+Card2.svelte
+```svelte
+<div class="card"> 
+    <div class="class-header">
+        <slot name='header'></slot> 
+    </div>
+    <div class="class-content">
+        <slot name='content'></slot>
+    </div>
+    <div class="class-footer">
+        <slot name='footer'></slot>
+    </div>
+</div>
+```
+
+App.svelte
+```svelte
+<script>
+  import Card2 from "./components/Card2.svelte";
+</script>
+<main>
+	<Card2>
+		<div slot="header"> <h2>this is header</h2></div>
+		<div slot="content"> <img src="https://picsum.photos/200" alt=""> </div>
+		<div slot="footer"> <button>View details</button></div>
+	</Card2>
+</main>
+```
+
+6. in above 'Card2' add '<hr>' tag before footer slot and render if footer is define on parent only  
+
+Card2.svelte
+```svelte
+<div class="card"> 
+    <div class="class-header">
+        <slot name='header'></slot> 
+    </div>
+    <div class="class-content">
+        <slot name='content'></slot>
+    </div>
+    {#if $$slots.footer } // add here
+    <hr>
+    <div class="class-footer">
+        <slot name='footer'></slot>
+    </div>
+    {/if} / to here
+</div>
+```
+
+### Slots props
+
+we want to parent component to control how the child component wii render the content. 
+we can use slots for this.
+
+The task is how define print only 'firstName' or 'lastName' from the parent component. for this we can use slot prpos. 
+
+NameList.svelte
+```svelte
+<script>
+    const names = [
+        {fitstName: 'samadhi', lastName: 'laksahan'},
+        {fitstName: 'thi', lastName: 'pasi'},
+        {fitstName: 'mala', lastName: 'rath'},
+    ];
+</script>
+<main>
+    {#each names as name (name)}
+      <h2>{name.fitstName} {name.lastName}</h2>
+    {/each}
+</main>
+```
+
+7. in NameList component add slot inside loop and send values to parent component using slot props 
+
+NameList.svelte
+```svelte
+<main>
+    {#each names as name (name)}
+      <slot name="hero" firstName={name.fitstName} lastName={name.lastName}/>
+    {/each}
+</main>
+```
+
+8. in App component controll order of the 'firstName' and 'lastName'.
+
+App.svelte
+```svelte
+<main>
+	<NameList>
+		<h3 slot='hero' let:firstName let:lastName >
+			{firstName} {lastName}
+		</h3>
+	</NameList>
+	<NameList>
+		<h3 slot='hero' let:firstName let:lastName >
+			{lastName} {firstName} 
+		</h3>
+	</NameList>
+</main>
+```
