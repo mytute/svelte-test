@@ -1,12 +1,20 @@
 <script>
-
+  import ChildStyle from "./components/ChildStyle.svelte";
 </script>
 
 <main>
-
+   <h4>App component text</h4>
+   <h3>App component global style</h3>
+   <ChildStyle/>
 </main>
 
 <style>
+	:global(h3){
+     color: blue;
+    }
+	h4 {
+	  color: orange;
+	}
 	main {
 		/* text-align: center; */
 		padding: 1em;
