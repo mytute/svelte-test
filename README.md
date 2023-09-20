@@ -1,189 +1,67 @@
-# Slots, Named Slots and Slots props
+#  Component Styles
 
-### Slots    
+  
 
-1. create Card component inside 'component' folder. And pass 'content' to 'Card' component from 'App' component.  
+1. create component call 'ChildStyle' and make it 'App' component's child component. And add the h3 and h4 tags for the both components. 
+
+App.svelte
+```svelte
+<script>
+  import ChildStyle from "./components/ChildStyle.svelte";
+</script>
+
+<main>
+   <h4>App component text</h4>
+   <h3>App component global style</h3>
+   <ChildStyle/>
+</main>
+```
+
+ChildStyle.svelte
+```svelte
+<main>
+    <h4>ChildStyle component text</h4>
+    <h3>ChildStyle component global style</h3>
+</main>
+<style>
+
+</style>
+```
+
+
+2. in App component, add color style for h4 tag and show it will only effect for App component and not for 'ChildStyle' component 
 
 
 here only passing only string value to child component.
 
 App.svelte
 ```svelte
-<script>
-  import Card from "./components/Card.svelte";
-</script>
-
-<main>
-  <Card content="child 001"/>
-  <Card content="child 002"/>
-</main>
+<style>
+	h4 {
+	  color: orange;
+	}
+</style>
 ```
 
-Card.svelte
+3. in ChildStyle component, add color style for h4 tag and show it will only effect for ChildStyle component and not for 'App' component.
+
+ChildStyle.svelte
 ```svelte
-<script>
-    export let content;
-</script>
-
-<div class="card">{content}</div>
-
 <style>
-    .card {
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-        transition: 0.2s;
-        padding: 16px;
-        margin-bottom: 20px;
-        width: 200px;
-    }
-    .card:hover{
-        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-    }
+   h4 {
+     color: olivedrab;
+   }
 </style>
 ```
 
 
-2. according to above example show how to pass html to the child component.
+4. using global modifire apply global style and show it dose not matter child or parent, It will apply styles globally.  
 
-* in parent component make open-close tag of child component and between it add content.
-* in child tag add slot tag instead of content.
-
-App.svelte
+ChildStyle.svelte
 ```svelte
-<main>
-  <Card> Card Content </Card>
-  <Card> <h2>Card Content</h2> </Card>
-</main>
-```
-
-Card.svelte
-```svelte
-<div class="card"> <slot/> </div>
-
-```
-
-3. show how to add default content 
-
-* make '<slot/>' tag to open close tag and add default content between it. 
-
-App.svelte
-```svelte
-<main>
-  <Card> Card Content </Card>
-  <Card> <h2>Card Content</h2> </Card>
-  <Card/>
-</main>
-```
-
-Card.svelte
-```svelte
-<div class="card"> <slot>Default content</slot> </div>
-
-```
-
-### Named Slots 
-
-* make multiple slots  
-
-4. create copy of 'Card' component call 'Card2' inside component folder.
-
-5. in 'Card2', add 3 parts slots with name attribute in following way.
-Card2.svelte
-```svelte
-<div class="card"> 
-    <div class="class-header">
-        <slot name='header'></slot> 
-    </div>
-    <div class="class-content">
-        <slot name='content'></slot>
-    </div>
-    <div class="class-footer">
-        <slot name='footer'></slot>
-    </div>
-</div>
-```
-
-App.svelte
-```svelte
-<script>
-  import Card2 from "./components/Card2.svelte";
-</script>
-<main>
-	<Card2>
-		<div slot="header"> <h2>this is header</h2></div>
-		<div slot="content"> <img src="https://picsum.photos/200" alt=""> </div>
-		<div slot="footer"> <button>View details</button></div>
-	</Card2>
-</main>
-```
-
-6. in above 'Card2' add '<hr>' tag before footer slot and render if footer is define on parent only  
-
-Card2.svelte
-```svelte
-<div class="card"> 
-    <div class="class-header">
-        <slot name='header'></slot> 
-    </div>
-    <div class="class-content">
-        <slot name='content'></slot>
-    </div>
-    {#if $$slots.footer } // add here
-    <hr>
-    <div class="class-footer">
-        <slot name='footer'></slot>
-    </div>
-    {/if} / to here
-</div>
-```
-
-### Slots props
-
-we want to parent component to control how the child component wii render the content. 
-we can use slots for this.
-
-The task is how define print only 'firstName' or 'lastName' from the parent component. for this we can use slot prpos. 
-
-NameList.svelte
-```svelte
-<script>
-    const names = [
-        {fitstName: 'samadhi', lastName: 'laksahan'},
-        {fitstName: 'thi', lastName: 'pasi'},
-        {fitstName: 'mala', lastName: 'rath'},
-    ];
-</script>
-<main>
-    {#each names as name (name)}
-      <h2>{name.fitstName} {name.lastName}</h2>
-    {/each}
-</main>
-```
-
-7. in NameList component add slot inside loop and send values to parent component using slot props 
-
-NameList.svelte
-```svelte
-<main>
-    {#each names as name (name)}
-      <slot name="hero" firstName={name.fitstName} lastName={name.lastName}/>
-    {/each}
-</main>
-```
-
-8. in App component controll order of the 'firstName' and 'lastName'.
-
-App.svelte
-```svelte
-<main>
-	<NameList>
-		<h3 slot='hero' let:firstName let:lastName >
-			{firstName} {lastName}
-		</h3>
-	</NameList>
-	<NameList>
-		<h3 slot='hero' let:firstName let:lastName >
-			{lastName} {firstName} 
-		</h3>
-	</NameList>
-</main>
+<style>
+   :global(h3){
+     color: blue;
+   }
+</style>
 ```
