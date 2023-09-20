@@ -1,9 +1,11 @@
 <script>
-
+  import Card from "./components/Card.svelte";
 </script>
 
 <main>
-
+	<Card> Card Content </Card>
+	<Card> <h2>Card Content</h2> </Card>
+	<Card/>
 </main>
 
 <style>
