@@ -1,165 +1,189 @@
-# Events and Event Forwarding
+# Slots, Named Slots and Slots props
 
-### Events    
-communicate child to parent component.    
-here implement popup concept to practise Events. 
+### Slots    
+
+1. create Card component inside 'component' folder. And pass 'content' to 'Card' component from 'App' component.  
 
 
+here only passing only string value to child component.
 
-1. create Popup component inside 'component' folder.   
-
-2. add basic show component logic in App comopnent with button click.
-
-App.svelte 
+App.svelte
 ```svelte
 <script>
-   import Popup from "./components/Popup.svelte";
-   let showPopup = false;
+  import Card from "./components/Card.svelte";
 </script>
+
 <main>
-	<button on:click={()=>{showPopup=true}} >Show Popup</button>
-	{#if showPopup}
-	  <Popup/>
-	{/if}
+  <Card content="child 001"/>
+  <Card content="child 002"/>
 </main>
 ```
 
-Popup.svelte 
-```svelte
-<h2>PopUp Component</h2>
-```
-
-3. using custom events send message to App component to close popup
-
-Popup.svelte 
+Card.svelte
 ```svelte
 <script>
-    import { createEventDispatcher } from "svelte";
-    const dispatch = createEventDispatcher();
+    export let content;
 </script>
 
-<h2>PopUp Component</h2>
-<button on:click={()=>{dispatch('close')}} >Close Popup</button>
+<div class="card">{content}</div>
+
+<style>
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.2s;
+        padding: 16px;
+        margin-bottom: 20px;
+        width: 200px;
+    }
+    .card:hover{
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+</style>
 ```
 
-get child event using 'on:close' event on child tag
 
-App.svelte 
+2. according to above example show how to pass html to the child component.
+
+* in parent component make open-close tag of child component and between it add content.
+* in child tag add slot tag instead of content.
+
+App.svelte
 ```svelte
-<script>
-   let showPopup = false;
-</script>
 <main>
-	{#if showPopup}
-	 <Popup on:close={()=>(showPopup = false)}/>
-	{/if}
+  <Card> Card Content </Card>
+  <Card> <h2>Card Content</h2> </Card>
 </main>
 ```
 
-3. show in above example how to pass data to parent component.
-
-pass data as second parameter in dispatch function in 'Popup' component.  
-
-Popup.svelte 
+Card.svelte
 ```svelte
-<button on:click={()=>{dispatch('close', 'samadhi')}} >Close Popup</button>
+<div class="card"> <slot/> </div>
+
 ```
 
-get child event using 'on:close' event on child tag
+3. show how to add default content 
 
-App.svelte 
+* make '<slot/>' tag to open close tag and add default content between it. 
+
+App.svelte
 ```svelte
-<script>
-   let showPopup = false;
-   function closePopup(event){
-	  showPopup = false;
-	  console.log(event.detail)
-   }
-</script>
-
 <main>
-	{#if showPopup}
-	  <Popup on:close={closePopup}/>
-	{/if}
+  <Card> Card Content </Card>
+  <Card> <h2>Card Content</h2> </Card>
+  <Card/>
 </main>
 ```
 
-# Event Forwarding   
+Card.svelte
+```svelte
+<div class="card"> <slot>Default content</slot> </div>
 
-This is needed if you want to listen to an event on a deeply nested component. 
-send an event in following order.  
-child event > parent > parent top
+```
 
+### Named Slots 
 
-4. create another two components call 'Inner' and 'Outer' inside component folder. And place in following order as nested.   
-App > Outer > Inner 
+* make multiple slots  
 
-now show how to pass 'Inner' component button event to App component. 
+4. create copy of 'Card' component call 'Card2' inside component folder.
 
-App.svelte 
+5. in 'Card2', add 3 parts slots with name attribute in following way.
+Card2.svelte
+```svelte
+<div class="card"> 
+    <div class="class-header">
+        <slot name='header'></slot> 
+    </div>
+    <div class="class-content">
+        <slot name='content'></slot>
+    </div>
+    <div class="class-footer">
+        <slot name='footer'></slot>
+    </div>
+</div>
+```
+
+App.svelte
 ```svelte
 <script>
-  import Outer from "./components/Outer.svelte";
-   function clickInnerButton(event){
-      console.log("inner data", event.detail);
-	  alert('click inner button');
-   }
+  import Card2 from "./components/Card2.svelte";
 </script>
-
 <main>
-  <Outer on:greet={clickInnerButton}/>
+	<Card2>
+		<div slot="header"> <h2>this is header</h2></div>
+		<div slot="content"> <img src="https://picsum.photos/200" alt=""> </div>
+		<div slot="footer"> <button>View details</button></div>
+	</Card2>
 </main>
 ```
 
-Outer.svelte 
+6. in above 'Card2' add '<hr>' tag before footer slot and render if footer is define on parent only  
+
+Card2.svelte
+```svelte
+<div class="card"> 
+    <div class="class-header">
+        <slot name='header'></slot> 
+    </div>
+    <div class="class-content">
+        <slot name='content'></slot>
+    </div>
+    {#if $$slots.footer } // add here
+    <hr>
+    <div class="class-footer">
+        <slot name='footer'></slot>
+    </div>
+    {/if} / to here
+</div>
+```
+
+### Slots props
+
+we want to parent component to control how the child component wii render the content. 
+we can use slots for this.
+
+The task is how define print only 'firstName' or 'lastName' from the parent component. for this we can use slot prpos. 
+
+NameList.svelte
 ```svelte
 <script>
-    import Inner from "./Inner.svelte";
+    const names = [
+        {fitstName: 'samadhi', lastName: 'laksahan'},
+        {fitstName: 'thi', lastName: 'pasi'},
+        {fitstName: 'mala', lastName: 'rath'},
+    ];
 </script>
-
 <main>
-    <Inner on:greet/>
+    {#each names as name (name)}
+      <h2>{name.fitstName} {name.lastName}</h2>
+    {/each}
 </main>
 ```
 
-Inner.svelte 
-```svelte
-<script>
-    import { createEventDispatcher } from "svelte";
-    const dispatch = createEventDispatcher();
-</script>
+7. in NameList component add slot inside loop and send values to parent component using slot props 
 
+NameList.svelte
+```svelte
 <main>
-    <h2>Inner Component</h2>
-    <button on:click={()=>{dispatch('greet','laksahan')}} >Click</button>
+    {#each names as name (name)}
+      <slot name="hero" firstName={name.fitstName} lastName={name.lastName}/>
+    {/each}
 </main>
 ```
 
-4. create another components call 'Button' inside component folder. And place in following order as nested.   
-App > Button 
+8. in App component controll order of the 'firstName' and 'lastName'.
 
-now show how to pass 'Button' component button event to App component without any event dispacher.
-
-'on:click' bind without function mean it pass to parent component as event.
-
-Button.svelte 
+App.svelte
 ```svelte
 <main>
-    <h2>Button Component</h2>
-    <button on:click >Click Me</button>
-</main>
-```
-
-App.svelte 
-```svelte
-<script>
-   import Button from "./components/Button.svelte";
-   function handleButton(event){
-     alert('click button in Button component')
-   }
-</script>
-
-<main>
-	<Button on:click={handleButton} />
+	<NameList>
+		<h3 slot='hero' let:firstName let:lastName >
+			{firstName} {lastName}
+		</h3>
+	</NameList>
+	<NameList>
+		<h3 slot='hero' let:firstName let:lastName >
+			{lastName} {firstName} 
+		</h3>
+	</NameList>
 </main>
 ```
