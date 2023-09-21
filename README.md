@@ -1,74 +1,84 @@
-#  Dynamic Components
+#  Module Context
 
-  do following task without dynamic components and with dynamic component.  
+sometime we need to share component current data between componet. for that we can use Module Context 
 
-  task: 
-  show the 'Tab A', 'Tab B', 'Tab C' content when click tab button   
+1. create new component call 'Counter' and make increment funtionility by click evnet. And add 3 'Counter' tag in to 'App' component. and show they make increment individually 
 
-### with if/else
+Counter.svelte
+```svelte
+<script>
+    let counter = 0;
+    function clickHandler(event){
+        counter ++;
+    }
+</script>
+<main>
+    <h2>Count - {counter}</h2>
+    <button on:click={clickHandler}>Increment</button>
+</main>
+```
 
-1. create three components call 'TabA', 'TabB', 'TabC'  inside components folder. And make them child to 'App' component.
+2. in 'Counter' component make another script tag and make it "context='module'". 
+make 'totalCount' varialbe to calculate total increment.
 
-2. in App component add 3 buttons to each tab and show only selected content using if/else. 
+Counter.svelte
+```svelte
+<script context="module">
+    let totalCount = 0;
+    export function getTotalCount(){
+        return totalCount;
+    }
+</script>
+
+<script>
+    let counter = 0;
+    function clickHandler(event){
+        counter ++;
+        totalCount ++;
+    }
+</script>
+<main>
+    <h2>Count - {counter}</h2>
+    <button on:click={clickHandler}>Increment</button>
+</main>
+```
+
+3. in App component impoirt 'getTotalCount' function and fire it when click the button. because this value not update when componnet rerender.
 
 App.svelte
 ```svelte
 <script>
-  import TabA from "./components/TabA.svelte";
-  import TabB from "./components/TabB.svelte";
-  import TabC from "./components/TabC.svelte";
-
-  let activeTab = 'TabA'
+  import Counter, { getTotalCount }  from "./components/Counter.svelte";
 </script>
 
 <main>
-	<button on:click={()=>{activeTab='TabA'}}>Tab A</button>
-	<button on:click={()=>{activeTab='TabB'}}>Tab B</button>
-	<button on:click={()=>{activeTab='TabC'}}>Tab C</button>
-    {#if activeTab === 'TabA'}
-	<TabA/>
-	{/if}
-	{#if activeTab === 'TabB'}
-	<TabB/>
-	{/if}
-	{#if activeTab === 'TabC'}
-	<TabC/>
-	{/if}
-
+	<button on:click={()=>{alert(getTotalCount())}} >Alert total count</button>
+   <Counter/>
+   <Counter/>
+   <Counter/>
 </main>
 ```
 
+4. in 'Counter' component show if we use 'totalCount' variable instead of 'counter' it will not update the dom. show but counting by click 'Add total count' button on 'App' component.  
 
-### with Dynamic Components  
-
-3. show above same baheviour with 'svelte:component' special elements
-
-App.svelte
+Counter.svelte
 ```svelte
-<script>
-  import TabA from "./components/TabA.svelte";
-  import TabB from "./components/TabB.svelte";
-  import TabC from "./components/TabC.svelte";
-
-  let activeTab = TabA
+<script context="module">
+    let totalCount = 0;
+    export function getTotalCount(){
+        return totalCount;
+    }
 </script>
 
+<script>
+    let counter = 0;
+    function clickHandler(event){
+        counter ++;
+        totalCount ++;
+    }
+</script>
 <main>
-	<button on:click={()=>{activeTab=TabA}}>Tab A</button>
-	<button on:click={()=>{activeTab=TabB}}>Tab B</button>
-	<button on:click={()=>{activeTab=TabC}}>Tab C</button>
-
-	<svelte:component this={activeTab} ></svelte:component>
-
+    <h2>Count - {totalCount}</h2>
+    <button on:click={clickHandler}>Increment</button>
 </main>
-
 ```
-
-### Special Elements 
-
-svelte:component - for dynamic components.  
-svelte:sefl - Allows a components to contain itself recursively.  
-svelte:window - Add event listeners to the window object.
-svlete:body - listen for events that fire on the document body 
-svelte:head - insert elements inside the <head> of your document.  
-svelte:options - Specify compiler options.
