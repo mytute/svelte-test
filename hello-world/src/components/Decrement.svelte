@@ -1,5 +1,5 @@
 <script>
-    import { count } from '../store/stores';
+    import { count, customCount } from '../store/stores';
     function decrement(){
         count.update(value =>{
             return value-1;
@@ -9,4 +9,5 @@
 
 <main>
     <button on:click={decrement} >Decrement</button>
+    <button on:click={()=>{customCount.decrement()}} >Custom Decrement</button>
 </main>

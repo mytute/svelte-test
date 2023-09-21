@@ -20,7 +20,7 @@ export const count = writable();
 2. create new component call 'Display' for display store 'count' value and make subscribe the 'count' store. And make unsubscribe the count store using 'onDestroy' hook
 
 Display.svelte
-```js 
+```svelte 
 <script>
     import { onDestroy } from 'svelte';
     import { count } from '../store/stores';
@@ -40,7 +40,7 @@ Display.svelte
 3. create new component call 'Increment' to update count store value when click 'Increment' button on this 'Increment' component.
 
 Increment.svelte
-```js 
+```svelte 
 <script>
     import { count } from '../store/stores';
     function increment(){
@@ -58,7 +58,7 @@ Increment.svelte
 4. create new component call 'Decrement' to update count store value when click 'Decrement' button on this 'Decrement' component.
 
 Decrement.svelte
-```js 
+```svelte 
 <script>
     import { count } from '../store/stores';
     function decrement(){
@@ -75,7 +75,7 @@ Decrement.svelte
 
 5. create new component call 'Reset' to set count store value 0 when click 'Reset' button on this 'Reset' component.
 Reset.svelte
-```js 
+```svelte 
 <script>
     import { count } from '../store/stores';
     function reset(){
@@ -91,12 +91,135 @@ Reset.svelte
 6. trick: in Display component instead of unsubscription you can use '$' symbol before 'count' variable for auto unsubscribe count store.   
 
 Display.svelte
-```js 
+```svelte 
 <script>
     import { count } from '../store/stores';
 </script>
 
 <main>
     <h2>Count: {$count}</h2>
+</main>
+```
+
+### Readable Stores   
+
+Readable Stores not allow to update value from other components.    
+as a example for Readable store make time component.   
+
+7. add 'readable' time store in 'store.js' file   
+
+```js 
+import { readable } from 'svelte/store';
+
+export const time = readable(new Date(), set =>{
+    const interval = setInterval(()=>{
+        set(new Date())
+    }, 1000);
+
+    return function(){
+        clearInterval(interval);
+    }
+})
+```
+
+8. make new component call 'Timer' and dispaly 'time' store value in 'Timer' component. when you '$' with store the no need to subscribe/unsubscribe.     
+
+Timer.svelte
+```svelte 
+<script>
+    import { time } from '../store/stores';
+    const dateFormatter = new Intl.DateTimeFormat('en',{
+        hour12:true,
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit'
+    })
+</script>
+
+<main>
+  <h2>The time is {dateFormatter.format($time)}</h2>
+</main>
+```
+
+
+
+### Derived Stores 
+
+store who is value is base on the value no more other store is called 'Derived' store.
+
+9. show duration of seconds that page init. 
+here count of seconds should update when store 'time' value changed. for that we are using 'derived'
+
+```js 
+import { readable, derived } from 'svelte/store';
+
+export const time = readable(new Date(), set =>{
+    const interval = setInterval(()=>{
+        set(new Date())
+    }, 1000);
+
+    return function(){
+        clearInterval(interval);
+    }
+});
+
+const start = new Date();
+export const elapsedTime = derived(time, $time => {
+    return Math.round(($time - start)/1000);
+})
+```
+
+Timer.svelte
+```svelte 
+<script>
+    import { elapsedTime } from '../store/stores';
+</script>
+
+<main>
+  <h2>You have been viewing this page for {$elapsedTime} </h2>
+</main>
+```
+
+### Custom Stores 
+
+10. create 'createCount' function that return state change function. in this way we no need to handdle state change logic in the component.   
+store.js
+```js 
+function createCount(){
+    const { subscribe, set, update } = writable(0);
+    return {
+        subscribe,
+        increment: (size=1)=> update((n)=> n+size),
+        decrement: (size=1)=> update((n)=> n-size),
+        reset: ()=> set(0),
+    }
+}
+export const customCount = createCount();
+```
+
+11. import 'customCount' where you need to import and call it's function to change state.   
+in following code show call customCount function in above Increment component.  
+
+Increment.svelte
+```svelte 
+<script>
+    import {  customCount } from '../store/stores';
+</script>
+
+<main>
+    <button on:click={()=>{customCount.increment()}} >Custom Increment</button>
+</main>
+```
+
+12. show how to use 'customCount' component to dispaly it's value in 'Timer' component.   
+
+Timer.svelte
+```svelte 
+<script>
+    import { elapsedTime } from '../store/stores';
+</script>
+
+<main>
+  <h2>You have been viewing this page for { $elapsedTime } </h2>
 </main>
 ```
